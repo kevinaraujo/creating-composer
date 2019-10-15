@@ -1,0 +1,24 @@
+{
+  "name": "kevin/package",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Kevin Araújo",
+      "email": "kevin.araujo@pravaler.com.br"
+    }
+  ],
+  "require-dev": {
+    "phpunit/phpunit": "^7"
+  },
+  "autoload": {
+    "psr-4": {
+      "KevinAraujo\\": "src/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit --testdox"
+  },
+  "require": {
+    "web-token/jwt-framework": "^2.0"
+  }
+}

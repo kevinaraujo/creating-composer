@@ -1,0 +1,61 @@
+{
+    "name": "web-token/jwt-bundle",
+    "description": "JWT Bundle of the JWT Framework.",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "keywords": ["JWS", "JWT", "JWE", "JWA", "JWK", "JWKSet", "Jot", "Jose", "RFC7515", "RFC7516", "RFC7517", "RFC7518", "RFC7519", "RFC7520", "Bundle", "Symfony"],
+    "homepage": "https://github.com/web-token",
+    "authors": [
+        {
+            "name": "Florent Morselli",
+            "homepage": "https://github.com/Spomky"
+        },{
+            "name": "All contributors",
+            "homepage": "https://github.com/web-token/jwt-bundle/contributors"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Jose\\Bundle\\JoseFramework\\":  ""
+        }
+    },
+    "require": {
+        "psr/event-dispatcher": "^1.0",
+        "symfony/config": "^4.2",
+        "symfony/dependency-injection": "^4.2",
+        "symfony/event-dispatcher": "^4.2",
+        "symfony/http-kernel": "^4.2",
+        "web-token/jwt-core": "^2.0"
+    },
+    "require-dev": {
+        "nyholm/psr7": "^1.0",
+        "php-http/httplug-bundle": "^1.7",
+        "php-http/mock-client": "^1.0",
+        "phpunit/phpunit": "^8.0",
+        "symfony/browser-kit": "^4.2",
+        "symfony/framework-bundle": "^4.2",
+        "symfony/phpunit-bridge": "^4.2",
+        "symfony/serializer": "^4.2",
+        "symfony/yaml": "^4.2"
+    },
+    "suggest": {
+        "web-token/jwt-checker": "Add header and claim checker managers as Symfony services.",
+        "web-token/jwt-console": "Add Keys (JWK) and Key sets (JWKSet) management commands for your Symfony console.",
+        "web-token/jwt-encryption": "Add Encrypted tokens (JWE) support and useful Symfony services.",
+        "web-token/jwt-key-mgmt": "Add Keys (JWK) and Key sets (JWKSet) management tools.",
+        "web-token/jwt-signature": "Add signed tokens (JWS) support and useful Symfony services.",
+        "symfony/serializer": "Use the Symfony serializer to serialize/unserialize JWS and JWE tokens."
+    },
+    "extra": {
+        "branch-alias": {
+            "v1.0": "1.0.x-dev",
+            "v1.1": "1.1.x-dev",
+            "v1.2": "1.2.x-dev",
+            "v1.3": "1.3.x-dev",
+            "v2.0": "2.0.x-dev"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
