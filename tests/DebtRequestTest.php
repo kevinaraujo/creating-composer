@@ -10,7 +10,7 @@ class DebtRequestTest extends TestCase
     public function testRequestSuccess()
     {
         $app = new App('dev');
-        $data = $app->sendDebtRequest('/test', []);
+        $data = $app->sendDebtRequest('/account', []);
 
         $this->assertEquals(
             'ok',

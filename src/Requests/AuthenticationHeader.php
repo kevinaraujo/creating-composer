@@ -1,35 +1,31 @@
 <?php
 
 namespace KevinAraujo\Requests;
+use Jose\Component\Core\AlgorithmManager;
+use Jose\Component\Core\JWK;
+use Jose\Component\KeyManagement\KeyConverter\KeyConverter;
+use Jose\Component\Signature\Algorithm\ES512;
+use Jose\Component\Signature\Algorithm\HS256;
+use Jose\Component\Signature\Algorithm\HS512;
+use Jose\Component\Signature\JWSBuilder;
+use Jose\Component\Signature\Serializer\CompactSerializer;
 
-class AuthenticationHeader
+class AuthenticationHeader extends AppBase
 {
-    private $privateKey;
-    private $accessKey;
-    private $signatureHeader;
-
     private $httpMethod;
     private $MD5Content;
     private $endPoint;
 
     public function __construct(
+        string $apiClientKey,
         string $httpMethod,
         string $endPoint,
         array $postFields
     )
     {
-        $this->privateKey = 'MIHcAgEBBEIAyRa+hgmiOpzUN+/0vAMLZxeK7MWtJnBU+eFpp+ydOgRUbQRfg/Mv
-            tLiKPNOfG9h1Nf45nBG4TQvzSEgLn5zcpY2gBwYFK4EEACOhgYkDgYYABAHOrn3p
-            sZdRWjR5or0J3eBq+oaizCKKGvZFoNSBmV5WoXcxZJfWE8KLNjqo2+DzxIpEd4ua
-            PaJJHD6yY577MLWYXQCAJJ3a3/Pey7Blcu6M2rxKnCst5BQ5rV4OEz0HZv4KbjOI
-            lLjqJ0I/IUa9RmbS7oaTTm55ExLrGc20hJA1L755Dw==';
+        parent::__construct();
 
-        $this->accessKey = '16c8a1ec-8d75-47a1-b138-46746713b8d8';
-        $this->signatureHeader = [
-            'alg' => 'ES512',
-            'typ' => 'JWT'
-        ];
-
+        $this->apiClientKey = $apiClientKey;
         $this->httpMethod = $httpMethod;
         $this->endPoint = $endPoint;
         $this->MD5Content = '';
@@ -39,49 +35,56 @@ class AuthenticationHeader
         }
     }
 
-
     public function makeAuthentiationKey()
     {
-        $signedJWT = $this->makeSignedJWT();
+
+        $signedJWT = $this->mountSignedJWT();
 
         $result = sprintf(
             'QIT %s:%s',
-            json_encode($this->accessKey),
-            json_encode($signedJWT)
+            json_encode($this->apiClientKey),
+            $signedJWT
         );
 
         return $result;
     }
 
-    private function makeSignedJWT()
+    private function mountSignedJWT()
     {
-        $requestInformationSTR = $this->makeRequestInformationSTR();
 
-        $signatureJSON = [
-            'sub' => $this->accessKey,
-            'signature' => $requestInformationSTR
-        ];
-        echo die;
-        $signedJWT = [
-            $this->privateKey,
-            base64_encode(json_encode($signatureJSON)),
-            base64_encode(json_encode($this->signatureHeader))
-        ];
+        $algorithmManager = new AlgorithmManager([
+            new ES512(),
+        ]);
+
+        $values = KeyConverter::loadFromKey($this->privateKey);
+
+        $jwk = new JWK($values);
+        $payload = $this->mountPayload();
+
+        $jwsBuilder = new JWSBuilder($algorithmManager);
+        $jws = $jwsBuilder->create()
+            ->withPayload($payload)
+            ->addSignature($jwk, ['alg' => 'ES512'])
+            ->build();
+
+        $serializer = new CompactSerializer();
+        $signedJWT = $serializer->serialize($jws, 0);
+
+        var_dump($signedJWT);die;
 
         return $signedJWT;
     }
 
-    private function makeRequestInformationSTR()
+    private function mountPayload()
     {
         $HTTPVerb = $this->httpMethod;
         $MD5Content = $this->MD5Content;
         $ContentType = '';
-        $Date = gmdate('D, d M Y H:i:s T', time());;
+        $Date = gmdate('D, d M Y H:i:s T', time());
         $endPoint = $this->endPoint;
 
-
         $requestInformationSTR = sprintf(
-    '%s\n%s\n%s\n%s\n%s',
+            '%s\n%s\n%s\n%s\n%s',
             $HTTPVerb,
             $MD5Content,
             $ContentType,
@@ -89,7 +92,13 @@ class AuthenticationHeader
             $endPoint
         );
 
-        return $requestInformationSTR;
+        $payload = json_encode([
+            'sub' => $this->apiClientKey,
+            'signature' => $requestInformationSTR
+        ]);
+        //$payload = str_replace("//", "/", $payload);
+
+        return $payload;
     }
 
 }
