@@ -13,7 +13,8 @@ use Jose\Component\Signature\Serializer\CompactSerializer;
 class AuthenticationHeader extends AppBase
 {
     private $httpMethod;
-    private $MD5Content;
+    private $md5Content;
+    private $contentType;
     private $endPoint;
 
     public function __construct(
@@ -27,11 +28,13 @@ class AuthenticationHeader extends AppBase
 
         $this->apiClientKey = $apiClientKey;
         $this->httpMethod = $httpMethod;
+        $this->md5Content = '';
+        $this->contentType = '';
         $this->endPoint = $endPoint;
-        $this->MD5Content = '';
 
         if (sizeof($postFields) > 0){
-            $this->MD5Content = md5(json_encode($postFields));
+            $this->md5Content = md5(json_encode($postFields));
+            $this->contentType = 'application/json';
         }
     }
 
@@ -42,7 +45,7 @@ class AuthenticationHeader extends AppBase
 
         $result = sprintf(
             'QIT %s:%s',
-            json_encode($this->apiClientKey),
+            $this->apiClientKey,
             $signedJWT
         );
 
@@ -70,25 +73,23 @@ class AuthenticationHeader extends AppBase
         $serializer = new CompactSerializer();
         $signedJWT = $serializer->serialize($jws, 0);
 
-        var_dump($signedJWT);die;
-
         return $signedJWT;
     }
 
     private function mountPayload()
     {
-        $HTTPVerb = $this->httpMethod;
-        $MD5Content = $this->MD5Content;
-        $ContentType = '';
-        $Date = gmdate('D, d M Y H:i:s T', time());
+        $httpVerb = $this->httpMethod;
+        $md5Content = $this->md5Content;
+        $contentType = $this->contentType;
+        $date = gmdate('D, d M Y H:i:s T', time());
         $endPoint = $this->endPoint;
 
         $requestInformationSTR = sprintf(
             '%s\n%s\n%s\n%s\n%s',
-            $HTTPVerb,
-            $MD5Content,
-            $ContentType,
-            $Date,
+            $httpVerb,
+            $md5Content,
+            $contentType,
+            $date,
             $endPoint
         );
 
@@ -96,7 +97,7 @@ class AuthenticationHeader extends AppBase
             'sub' => $this->apiClientKey,
             'signature' => $requestInformationSTR
         ]);
-        //$payload = str_replace("//", "/", $payload);
+        $payload = stripslashes($payload);
 
         return $payload;
     }

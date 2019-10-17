@@ -2,13 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f86287ee-3e19-425e-ba8c-bfa5d4f5c44a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Requests/AuthenticationHeader.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Requests/AuthenticationHeader.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Requests/Request.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Requests/Request.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/DebtRequestTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/DebtRequestTest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/composer/autoload_classmap.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/autoload_classmap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/composer/autoload_static.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/autoload_static.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -139,6 +137,7 @@
       <workItem from="1570798801002" duration="3407000" />
       <workItem from="1571063281275" duration="23190000" />
       <workItem from="1571233985004" duration="7746000" />
+      <workItem from="1571318625602" duration="5698000" />
     </task>
     <servers />
   </component>

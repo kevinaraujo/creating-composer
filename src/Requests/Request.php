@@ -22,7 +22,7 @@ class Request extends AppBase
         $this->url = $this->prodUrl;
     }
 
-    public function post(string $endPoint, array $postFields)
+    public function get(string $endPoint, array $postFields)
     {
         $header = $this->makeHeader(
             'GET',
@@ -31,17 +31,17 @@ class Request extends AppBase
         );
 
         $route = $this->makeRoute($endPoint);
-
+        //var_dump($header);die;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $route);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
+        //curl_setopt($ch, CURLOPT_POST, 1);
+        //curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
 
         $response = curl_exec($ch);
 
-        curl_close();
+        curl_close($ch);
 
         return $response;
     }
@@ -61,8 +61,8 @@ class Request extends AppBase
         $authorizationKey = $authenticationHeader->makeAuthentiationKey();
 
         $header = [
-            'AUTHORIZATION' => $authorizationKey,
-            'API-CLIENT-KEY' => $this->apiClientKey
+            sprintf('AUTHORIZATION:%s', $authorizationKey),
+            sprintf('API-CLIENT-KEY:%s', $this->apiClientKey)
         ];
 
         return $header;
@@ -71,7 +71,7 @@ class Request extends AppBase
     private function makeRoute($endPoint)
     {
         $route = sprintf(
-            '%s/%s',
+            '%s%s',
             $this->url,
             $endPoint
         );

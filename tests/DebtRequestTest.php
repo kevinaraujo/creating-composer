@@ -7,14 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 class DebtRequestTest extends TestCase
 {
-    public function testRequestSuccess()
+    public function testRequestIsSuccess()
     {
         $app = new App('dev');
-        $data = $app->sendDebtRequest('/account', []);
+        $response = $app->sendDebtRequest('/account', []);
 
-        $this->assertEquals(
-            'ok',
-            $data
-        );
+        $data = json_decode($response);
+
+        $this->assertIsObject($data);
+        $this->assertArrayHasKey('encoded_body', (array) $data);
     }
 }

@@ -25,7 +25,7 @@ class App
     public function sendDebtRequest($route, $postfields)
     {
         $request = new Request($this->env);
-        $response = $request->post($route, $postfields);
+        $response = $request->get($route, $postfields);
 
         return $response;
     }
