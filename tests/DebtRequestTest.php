@@ -13,7 +13,7 @@ class DebtRequestTest extends TestCase
         $response = $app->sendDebtRequest('/account', []);
 
         $data = json_decode($response);
-
+        var_dump($data);
         $this->assertIsObject($data);
         $this->assertArrayHasKey('encoded_body', (array) $data);
     }
